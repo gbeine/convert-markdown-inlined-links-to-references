@@ -12,6 +12,7 @@ fs.readFile(process.argv[2], 'utf8', function (err, markdown) {
 	var counter = 1;
 	var matches = {};
 	var matcher = /\[.*?\]\((.*?)\)/g;
+	var links = "\n";
 	while (match = matcher.exec(markdown)) {
 		if (!matches[match[1]]) matches[match[1]] = counter++;
 	}
@@ -21,10 +22,10 @@ fs.readFile(process.argv[2], 'utf8', function (err, markdown) {
 		//var number = Object.keys(matches).length - matches[url] + 1;
 		var r = new RegExp("(\\[.*?\\])\\(" + url + "\\)", "g");
 		markdown = markdown.replace(r, "$1[" + number + "]");
-		markdown += "\n[" + number + "]: " + url;
+		links += "\n[" + number + "]: " + url;
 	});
 
-	fs.writeFile(process.argv[3], markdown, 'utf8', function (err) {
+	fs.writeFile(process.argv[3], markdown+links, 'utf8', function (err) {
 		if (err) return console.log(err);
 	});
 
